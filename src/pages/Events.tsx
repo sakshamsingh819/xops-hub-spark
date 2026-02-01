@@ -1,8 +1,8 @@
 import { useState } from "react";
+import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { Calendar, Clock, MapPin, Users, ArrowRight, Search, Filter } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Layout from "@/components/layout/Layout";
 import { cn } from "@/lib/utils";
 
 type EventType = "all" | "workshop" | "hackathon" | "bootcamp" | "meetup";
@@ -19,21 +19,29 @@ interface Event {
   maxAttendees: number;
   image: string;
   featured?: boolean;
+  joinLink?: string;
+  speaker?: string;
+  moreInfo?: string;
 }
 
 const events: Event[] = [
   {
     id: 1,
-    title: "AI & Machine Learning Workshop",
-    description: "Dive into the fundamentals of AI and ML with hands-on projects using Python and TensorFlow.",
-    date: "February 15, 2026",
-    time: "2:00 PM - 6:00 PM",
-    location: "Tech Hub, Room 301",
+    title: "🚀 GET FREE ORACLE & MICROSOFT CERTIFICATIONS! 🚀",
+    description:
+      "🚀 GET FREE ORACLE & MICROSOFT CERTIFICATIONS! 🚀\n\nA FREE E-Certificate of Participation will be provided to all attendees.",
+    moreInfo:
+      `Calling all Computer Science & Engineering students! Want to instantly boost your resume and gain a serious edge in the job market?\n\nJAIN (Deemed-to-be University)'s Dept. of CSE (AI-Driven DevOps) and the X-Ops Club invite you to a must-attend session:\n\n✨ Oracle and Microsoft Free Certification Opportunities for Students: Tips, Guidance, and Career Pathways ✨\n\nJoin us to hear from Dr. Rajesh Bingu Ph.D.—a Global Certification Mentor—who will reveal exactly how you can acquire valuable, industry-recognized Oracle and Microsoft certifications at absolutely NO cost!\n\nWhat You'll Gain:\n- Actionable Tips on the free certification process.\n- Expert Guidance to fast-track your career.\n- Understanding of the clear career pathways these credentials open.\n\nDon't miss this chance to invest in your future!`,
+    date: "17-10-2025 (Friday)",
+    time: "07.00 PM",
+    location: "Online (Google Meet)",
     type: "workshop",
-    attendees: 45,
-    maxAttendees: 60,
-    image: "🤖",
+    attendees: 0,
+    maxAttendees: 500,
+    image: "🎓",
     featured: true,
+    joinLink: "https://meet.google.com/bvp-cytn-iwj",
+    speaker: "Dr. Rajesh Bingu Ph.D.",
   },
   {
     id: 2,
@@ -105,6 +113,10 @@ const eventTypes: { value: EventType; label: string }[] = [
   { value: "bootcamp", label: "Bootcamps" },
   { value: "meetup", label: "Meetups" },
 ];
+
+
+import Layout from "@/components/layout/Layout";
+
 
 const Events = () => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -185,7 +197,7 @@ const Events = () => {
               {featuredEvents.map((event, index) => (
                 <div
                   key={event.id}
-                  className="gradient-border p-8 card-hover animate-fade-in-up"
+                  className="gradient-border p-8 card-hover animate-fade-in-up relative"
                   style={{ animationDelay: `${index * 0.1}s` }}
                 >
                   <div className="flex items-start gap-4">
@@ -201,7 +213,16 @@ const Events = () => {
                       </div>
                       <h3 className="text-xl font-semibold mb-2">{event.title}</h3>
                       <p className="text-muted-foreground text-sm mb-4">{event.description}</p>
-                      
+                      {event.speaker && (
+                        <div className="mb-2 text-sm font-medium text-primary">
+                          Speaker: {event.speaker}
+                        </div>
+                      )}
+                      {event.joinLink && (
+                        <div className="mb-2 text-sm">
+                          <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Join Link</a>
+                        </div>
+                      )}
                       <div className="grid grid-cols-2 gap-3 text-sm text-muted-foreground mb-4">
                         <div className="flex items-center gap-2">
                           <Calendar className="h-4 w-4 text-primary" />
@@ -220,11 +241,27 @@ const Events = () => {
                           {event.attendees}/{event.maxAttendees} spots
                         </div>
                       </div>
-
-                      <Button variant="hero" className="w-full">
-                        Register Now
-                        <ArrowRight className="h-4 w-4" />
-                      </Button>
+                      <div className="flex gap-2">
+                        <Button variant={event.id === 1 ? "default" : "hero"} className={event.id === 1 ? "flex-1 bg-green-600 hover:bg-green-700 text-white font-bold" : "flex-1"}>
+                          Register Now
+                          <ArrowRight className="h-4 w-4 ml-2" />
+                        </Button>
+                        {event.moreInfo && (
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button variant="outline" className="flex-1">Know More</Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                              <DialogHeader>
+                                <DialogTitle>Event Details</DialogTitle>
+                                <DialogDescription>
+                                  <pre className="whitespace-pre-wrap text-left font-sans">{event.moreInfo}</pre>
+                                </DialogDescription>
+                              </DialogHeader>
+                            </DialogContent>
+                          </Dialog>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -239,7 +276,7 @@ const Events = () => {
         <div className="container mx-auto px-4">
           <h2 className="text-2xl font-bold mb-8">All Events</h2>
           
-          {regularEvents.length === 0 && featuredEvents.length === 0 ? (
+          {regularEvents.length === 0 ? (
             <div className="text-center py-16">
               <Filter className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-muted-foreground">No events found matching your criteria.</p>
@@ -264,7 +301,16 @@ const Events = () => {
                     <p className="text-muted-foreground text-sm mb-4 line-clamp-2">
                       {event.description}
                     </p>
-
+                    {event.speaker && (
+                      <div className="mb-2 text-sm font-medium text-primary">
+                        Speaker: {event.speaker}
+                      </div>
+                    )}
+                    {event.joinLink && (
+                      <div className="mb-2 text-sm">
+                        <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Join Link</a>
+                      </div>
+                    )}
                     <div className="space-y-2 text-sm text-muted-foreground mb-4">
                       <div className="flex items-center gap-2">
                         <Calendar className="h-4 w-4 text-primary" />
@@ -290,9 +336,26 @@ const Events = () => {
                       </div>
                     </div>
 
-                    <Button variant="hero-outline" className="w-full">
-                      Register
-                    </Button>
+                    <div className="flex gap-2">
+                      <Button variant="hero-outline" className="flex-1">
+                        Register
+                      </Button>
+                      {event.moreInfo && (
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" className="flex-1">Know More</Button>
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle>Event Details</DialogTitle>
+                              <DialogDescription>
+                                <pre className="whitespace-pre-wrap text-left font-sans">{event.moreInfo}</pre>
+                              </DialogDescription>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
+                      )}
+                    </div>
                   </div>
                 </div>
               ))}
