@@ -54,9 +54,6 @@ const Index = () => {
         </div>
 
         {/* Decorative Elements */}
-        <div className="absolute top-20 left-10 opacity-20 float">
-          <Terminal className="h-16 w-16 text-primary" />
-        </div>
         <div className="absolute bottom-20 right-10 opacity-20 float" style={{ animationDelay: "2s" }}>
           <Cpu className="h-20 w-20 text-accent" />
         </div>
@@ -71,14 +68,12 @@ const Index = () => {
 
             {/* Main Heading */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
-              <span className="text-foreground">Build. Learn. </span>
-              <span className="text-gradient">Innovate.</span>
+              <span className="text-foreground" style={{ textShadow: '0 4px 24px #3b82f6, 0 1px 2px #60a5fa' }}>The X-Ops Club</span>
             </h1>
 
             {/* Subheading */}
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up stagger-1">
-              Join X-Ops, the premier tech club where developers, designers, and innovators 
-              come together to shape the future of technology.
+              Empowering the next generation of tech innovators through workshops, hackathons, and a vibrant community of passionate developers.
             </p>
 
             {/* CTA Buttons */}

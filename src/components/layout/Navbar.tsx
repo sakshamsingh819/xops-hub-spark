@@ -21,13 +21,13 @@ const Navbar = () => {
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
-          <Link to="/" className="flex items-center gap-2">
-            <img src="/favicon.ico" alt="X-Ops Logo" className="h-14 w-14" />
-            <span className="hidden sm:inline font-bold text-lg tracking-tight">X-Ops</span>
+          <Link to="/" className="flex items-center gap-0">
+            <img src="/favicon.ico" alt="X-Ops Logo" className="h-28 w-28" />
+            <span className="hidden sm:inline font-bold text-lg tracking-tight">The X-Ops Club</span>
           </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
+          {/* Desktop Navigation & Auth Buttons in one line right-aligned */}
+          <div className="hidden md:flex items-center justify-end space-x-8 ml-auto">
             {navLinks.map((link) => (
               <Link
                 key={link.path}
@@ -42,10 +42,6 @@ const Navbar = () => {
                 {link.name}
               </Link>
             ))}
-          </div>
-
-          {/* Desktop Auth Buttons */}
-          <div className="hidden md:flex items-center gap-3">
             <Button variant="ghost" asChild>
               <Link to="/login">Log in</Link>
             </Button>

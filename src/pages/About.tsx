@@ -24,14 +24,14 @@ const teamMembers = [
     name: "Shreyas S",
     role: "Club Lead",
     bio: "Leading the shift to autonomous DevOps.",
-    avatar: "👨‍💻",
+    avatar: "👨",
     socials: { linkedin: "https://www.linkedin.com/in/shreyas-s-357056327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Lakshitha A",
     role: "Club Co-Lead",
     bio: "Accelerating team growth and AI integration.",
-    avatar: "👩‍💻",
+    avatar: "👩",
     socials: { linkedin: "https://www.linkedin.com/in/lakshitha-a-b16090330?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
@@ -52,28 +52,28 @@ const teamMembers = [
     name: "Thavanidhi V P",
     role: "Event & Outreach Lead",
     bio: "Bridging the gap between AI tech and the student community.",
-    avatar: "👩‍💻",
+    avatar: "👩",
     socials: { linkedin: "https://www.linkedin.com/in/thavanidhi-v-p-1a797136a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" },
   },
   {
     name: "Sujay V",
     role: "Event & Outreach Co-Lead",
     bio: "Expanding the ecosystem for the next gen of DevOps.",
-    avatar: "🧑‍💻",
+    avatar: "🧑",
     socials: { linkedin: "https://www.linkedin.com/in/sujayv26?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Aniruddh V N",
     role: "Treasurer",
     bio: "Managing resources for a high-performance tech future.",
-    avatar: "🧑‍💻",
+    avatar: "🧑",
     socials: { linkedin: "https://www.linkedin.com/in/aniruddh-v-n-5b7124340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Divyashree M",
     role: "Co-Treasurer",
     bio: "Financial operations for sustainable tech growth.",
-    avatar: "👩‍💻",
+    avatar: "👩",
     socials: { linkedin: "https://www.linkedin.com/in/divyashree-m-11a334326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
 ];
@@ -217,7 +217,9 @@ const About = () => {
                 <h3 className="text-lg font-semibold">{member.name}</h3>
                 <p className="text-primary text-sm font-medium mb-2">{member.role}</p>
                 <p className="text-muted-foreground text-sm mb-4">{member.bio}</p>
-                
+                <div className="mb-2">
+                  {/* Removed 'The X-Ops Club' text above social links */}
+                </div>
                 <div className="flex items-center justify-center gap-4">
                   {member.socials.github && (
                     <a

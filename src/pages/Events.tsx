@@ -44,19 +44,6 @@ const events: Event[] = [
     speaker: "Dr. Rajesh Bingu Ph.D.",
   },
   {
-    id: 2,
-    title: "Spring Hackathon 2026",
-    description: "48-hour hackathon with amazing prizes. Build innovative solutions for real-world problems.",
-    date: "March 1-2, 2026",
-    time: "9:00 AM Start",
-    location: "Innovation Center",
-    type: "hackathon",
-    attendees: 120,
-    maxAttendees: 200,
-    image: "🚀",
-    featured: true,
-  },
-  {
     id: 3,
     title: "Cloud Computing Bootcamp",
     description: "3-day intensive bootcamp covering AWS, Azure, and Google Cloud fundamentals.",
@@ -67,30 +54,6 @@ const events: Event[] = [
     attendees: 80,
     maxAttendees: 100,
     image: "☁️",
-  },
-  {
-    id: 4,
-    title: "Web3 & Blockchain Meetup",
-    description: "Monthly meetup discussing the latest trends in Web3, DeFi, and blockchain technology.",
-    date: "March 28, 2026",
-    time: "6:00 PM - 8:00 PM",
-    location: "Crypto Lounge",
-    type: "meetup",
-    attendees: 35,
-    maxAttendees: 50,
-    image: "⛓️",
-  },
-  {
-    id: 5,
-    title: "React & Next.js Workshop",
-    description: "Learn modern React patterns and build a full-stack app with Next.js 14.",
-    date: "April 5, 2026",
-    time: "1:00 PM - 5:00 PM",
-    location: "Dev Studio A",
-    type: "workshop",
-    attendees: 28,
-    maxAttendees: 40,
-    image: "⚛️",
   },
   {
     id: 6,
@@ -242,9 +205,8 @@ const Events = () => {
                         </div>
                       </div>
                       <div className="flex gap-2">
-                        <Button variant={event.id === 1 ? "default" : "hero"} className={event.id === 1 ? "flex-1 bg-green-600 hover:bg-green-700 text-white font-bold" : "flex-1"}>
-                          Register Now
-                          <ArrowRight className="h-4 w-4 ml-2" />
+                        <Button variant={event.id === 1 ? "default" : "hero"} className={event.id === 1 ? "flex-1 bg-gray-400 cursor-not-allowed text-white font-bold" : "flex-1"} disabled={event.id === 1}>
+                          Registration Closed
                         </Button>
                         {event.moreInfo && (
                           <Dialog>
