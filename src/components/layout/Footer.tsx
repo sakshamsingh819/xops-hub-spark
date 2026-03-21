@@ -52,9 +52,8 @@ const Footer = () => {
             <div className="-mt-2 flex items-center">
               <img 
                 src="/jain logo.jpg" 
-                alt="Jain Symbol" 
-                className="h-40 w-56 object-contain"
-                style={{ mixBlendMode: 'darken', filter: 'brightness(0.95) contrast(1.8) saturate(1.5) hue-rotate(0deg)' }}
+                alt="Jain University logo" 
+                className="h-40 w-80 object-contain opacity-70"
               />
             </div>
           </div>
