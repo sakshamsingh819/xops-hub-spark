@@ -56,8 +56,15 @@ const isAllowedOrigin = (origin) => {
     return true;
   }
 
-  if (allowLocalhost && (origin === "http://localhost:8080" || origin === "http://127.0.0.1:8080")) {
-    return true;
+  if (allowLocalhost) {
+    try {
+      const parsedOrigin = new URL(origin);
+      if (parsedOrigin.hostname === "localhost" || parsedOrigin.hostname === "127.0.0.1") {
+        return true;
+      }
+    } catch {
+      // Ignore malformed origins and continue to explicit allow-list checks.
+    }
   }
 
   if (origin.endsWith(".app.github.dev") || origin.endsWith(".vercel.app")) {
