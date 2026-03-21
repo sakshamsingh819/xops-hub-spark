@@ -36,9 +36,32 @@ export class AuthApiError extends Error {
   }
 }
 
-const apiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+const configuredApiBaseUrl = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+
+const isCodespacesHost =
+  typeof window !== "undefined" &&
+  window.location.hostname.endsWith(".app.github.dev");
+
+// In Codespaces, cross-port calls can be gated by tunnel auth. Prefer same-origin /api.
+const apiBaseUrl = isCodespacesHost ? "" : configuredApiBaseUrl;
 
 const withApiBaseUrl = (path: string) => `${apiBaseUrl}${path}`;
+
+const normalizeEmail = (email: string) => email.trim().toLowerCase();
+
+const isTunnelAuthResponse = (response: Response) => {
+  const authenticateHeader = response.headers.get("www-authenticate") || "";
+
+  if (response.status === 401 && authenticateHeader.toLowerCase().includes("tunnel")) {
+    return true;
+  }
+
+  if (response.redirected && response.url.includes("github.dev/pf-signin")) {
+    return true;
+  }
+
+  return false;
+};
 
 const parseResponse = async (response: Response) => {
   try {
@@ -66,19 +89,27 @@ const requestJson = async <T>(
     headers.Authorization = `Bearer ${options.token}`;
   }
 
-  let response: Response;
+  const sendRequest = async (requestUrl: string) => {
+    try {
+      return await fetch(requestUrl, {
+        method: options.method,
+        headers,
+        body: options.payload !== undefined ? JSON.stringify(options.payload) : undefined,
+      });
+    } catch {
+      throw new AuthApiError(
+        "Cannot reach the auth server. Start the API and try again.",
+        0
+      );
+    }
+  };
 
-  try {
-    response = await fetch(url, {
-      method: options.method,
-      headers,
-      body: options.payload !== undefined ? JSON.stringify(options.payload) : undefined,
-    });
-  } catch {
-    throw new AuthApiError(
-      "Cannot reach the auth server. Start the API and try again.",
-      0
-    );
+  let response = await sendRequest(url);
+
+  // If a configured cross-port URL is tunnel-protected, retry once via same-origin /api.
+  if (isTunnelAuthResponse(response) && configuredApiBaseUrl && url.startsWith(configuredApiBaseUrl)) {
+    const sameOriginUrl = url.slice(configuredApiBaseUrl.length) || "/";
+    response = await sendRequest(sameOriginUrl);
   }
 
   const data = await parseResponse(response);
@@ -96,10 +127,22 @@ const requestJson = async <T>(
 };
 
 export const signupUser = (payload: SignupPayload) =>
-  requestJson<AuthResponse>(withApiBaseUrl("/api/auth/signup"), { method: "POST", payload });
+  requestJson<AuthResponse>(withApiBaseUrl("/api/auth/signup"), {
+    method: "POST",
+    payload: {
+      ...payload,
+      email: normalizeEmail(payload.email),
+    },
+  });
 
 export const loginUser = (payload: LoginPayload) =>
-  requestJson<AuthResponse>(withApiBaseUrl("/api/auth/login"), { method: "POST", payload });
+  requestJson<AuthResponse>(withApiBaseUrl("/api/auth/login"), {
+    method: "POST",
+    payload: {
+      ...payload,
+      email: normalizeEmail(payload.email),
+    },
+  });
 
 export const fetchCurrentUser = (token: string) =>
   requestJson<SessionResponse>(withApiBaseUrl("/api/auth/me"), { method: "GET", token });

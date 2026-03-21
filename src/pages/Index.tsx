@@ -1,18 +1,5 @@
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border/50 animate-fade-in-up stagger-3">
-              {[
-                { value: "500+", label: "Members" },
-                { value: "50+", label: "Events Hosted" },
-                { value: "20+", label: "Partners" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-gradient">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
 import { Link } from "react-router-dom";
-import { ArrowRight, Code2, Users, Calendar, Sparkles, Terminal, Cpu } from "lucide-react";
+import { ArrowRight, Calendar, Code2, Cpu, Instagram, Linkedin, Mail, Sparkles, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
 import heroBg from "@/assets/hero-bg.jpg";
@@ -50,6 +37,24 @@ const upcomingEvents = [
     title: "Cloud Computing 101",
     date: "Mar 20, 2026",
     type: "Bootcamp",
+  },
+];
+
+const socialLinks = [
+  {
+    label: "LinkedIn",
+    href: "https://www.linkedin.com/in/xops-club-ju-fet/",
+    icon: Linkedin,
+  },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/xops.club_ju/",
+    icon: Instagram,
+  },
+  {
+    label: "Email",
+    href: "https://mail.google.com/mail/?view=cm&fs=1&to=xopsclub.cse.ju@gmail.com",
+    icon: Mail,
   },
 ];
 
@@ -102,10 +107,25 @@ const Index = () => {
               </Button>
             </div>
 
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-3 animate-fade-in-up stagger-3">
+              {socialLinks.map((social) => (
+                <a
+                  key={social.label}
+                  href={social.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={social.label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card/60 text-muted-foreground transition-colors hover:text-primary hover:border-primary/60"
+                >
+                  <social.icon className="h-5 w-5" />
+                </a>
+              ))}
+            </div>
+
             {/* Stats */}
             <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border/50 animate-fade-in-up stagger-3">
               {[
-                { value: "20+", label: "Members" },
+                { value: "30+", label: "Members" },
                 { value: "1+", label: "Events Hosted" },
                 { value: "3+", label: "Partners" },
               ].map((stat) => (

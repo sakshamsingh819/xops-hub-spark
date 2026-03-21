@@ -54,8 +54,8 @@ const events: Event[] = [
     time: "Time will be announced",
     location: "Seminar Hall 002",
     type: "meetup",
-    attendees: 0,
-    maxAttendees: 120,
+    attendees: 25,
+    maxAttendees: 35,
     image: "🎯",
     joinLink:
       "https://docs.google.com/forms/d/e/1FAIpQLScSSH4TaQ_ojWLoLimaA2CEIoYF9Eu-wonyWt77BEhB3YSkaw/viewform",
@@ -296,18 +296,22 @@ const Events = () => {
                       </div>
                     )}
                     <div className="space-y-2 text-sm text-muted-foreground mb-4">
-                      <div className="flex items-center gap-2">
-                        <Calendar className="h-4 w-4 text-primary" />
-                        {event.date}
-                      </div>
+                      {event.title !== "Cloud Computing Bootcamp" && (
+                        <div className="flex items-center gap-2">
+                          <Calendar className="h-4 w-4 text-primary" />
+                          {event.date}
+                        </div>
+                      )}
                       <div className="flex items-center gap-2">
                         <MapPin className="h-4 w-4 text-primary" />
                         {event.location}
                       </div>
-                      <div className="flex items-center gap-2">
-                        <Users className="h-4 w-4 text-primary" />
-                        {event.attendees}/{event.maxAttendees} attending
-                      </div>
+                      {event.title !== "Cloud Computing Bootcamp" && (
+                        <div className="flex items-center gap-2">
+                          <Users className="h-4 w-4 text-primary" />
+                          {event.attendees}/{event.maxAttendees} attending
+                        </div>
+                      )}
                     </div>
 
                     {/* Progress bar for spots */}

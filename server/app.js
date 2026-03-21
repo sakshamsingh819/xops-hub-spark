@@ -1,7 +1,9 @@
+import "dotenv/config";
 import cors from "cors";
 import express from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import nodemailer from "nodemailer";
 import crypto from "node:crypto";
 import fs from "node:fs/promises";
 import path from "node:path";
@@ -18,6 +20,32 @@ const usersFilePath = process.env.VERCEL
   : path.join(__dirname, "data", "users.json");
 const jwtSecret = process.env.JWT_SECRET || "dev-only-change-this-secret";
 const jwtExpiresIn = process.env.JWT_EXPIRES_IN || "7d";
+const smtpHost = process.env.SMTP_HOST;
+const smtpPort = Number(process.env.SMTP_PORT || 587);
+const smtpSecure = process.env.SMTP_SECURE === "true";
+const smtpUser = process.env.SMTP_USER;
+const smtpPass = process.env.SMTP_PASS;
+const fromEmail = process.env.FROM_EMAIL || smtpUser || "noreply@xops.local";
+
+let transporter = null;
+
+if (smtpHost && smtpUser && smtpPass) {
+  transporter = nodemailer.createTransport({
+    host: smtpHost,
+    port: smtpPort,
+    secure: smtpSecure,
+    auth: {
+      user: smtpUser,
+      pass: smtpPass,
+    },
+  });
+}
+
+if (transporter) {
+  console.log("Signup email: SMTP configured.");
+} else {
+  console.warn("Signup email: SMTP not configured. Confirmation emails are disabled.");
+}
 
 const isAllowedOrigin = (origin) => {
   if (!origin) {
@@ -134,6 +162,35 @@ const writeUsers = async (users) => {
   await fs.writeFile(usersFilePath, `${JSON.stringify(users, null, 2)}\n`, "utf8");
 };
 
+const buildSignupConfirmationText = (name) =>
+  `Dear ${name},
+
+Thank you for signing up!
+
+We are excited to have you join the XOps team. Your registration has been successfully completed, and you are now part of our growing community.
+
+Get ready to collaborate, learn, and build amazing things together. We will be sharing more details, updates, and next steps with you soon.
+
+If you have any questions or need assistance, feel free to reach out to us anytime.
+
+Welcome aboard!
+
+Best regards,
+XOps Team`;
+
+const sendSignupConfirmationEmail = async (user) => {
+  if (!transporter) {
+    return;
+  }
+
+  await transporter.sendMail({
+    from: fromEmail,
+    to: user.email,
+    subject: "Welcome to XOps! Signup Confirmed",
+    text: buildSignupConfirmationText(user.name),
+  });
+};
+
 app.get("/", (_req, res) => {
   res.status(200).json({
     name: "X-Ops Auth API",
@@ -185,7 +242,22 @@ app.post("/api/auth/signup", async (req, res) => {
     const existingUser = users.find((user) => user.email === email);
 
     if (existingUser) {
-      return res.status(409).json({ message: "An account with this email already exists." });
+      existingUser.name = name;
+      existingUser.passwordHash = await bcrypt.hash(password, 10);
+
+      await writeUsers(users);
+
+      try {
+        await sendSignupConfirmationEmail(existingUser);
+      } catch (emailError) {
+        console.error("Signup confirmation email failed:", emailError);
+      }
+
+      return res.status(200).json({
+        message: "Account already existed. Credentials updated and signed in.",
+        token: createAuthToken(existingUser),
+        user: sanitizeUser(existingUser),
+      });
     }
 
     const passwordHash = await bcrypt.hash(password, 10);
@@ -199,6 +271,12 @@ app.post("/api/auth/signup", async (req, res) => {
 
     users.push(newUser);
     await writeUsers(users);
+
+    try {
+      await sendSignupConfirmationEmail(newUser);
+    } catch (emailError) {
+      console.error("Signup confirmation email failed:", emailError);
+    }
 
     return res.status(201).json({
       message: "Account created successfully.",

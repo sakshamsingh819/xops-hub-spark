@@ -8,23 +8,18 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useToast } from "@/hooks/use-toast";
 import { z } from "zod";
 import { cn } from "@/lib/utils";
-import { isAuthApiError, signupUser } from "@/lib/authApi";
+import { isAuthApiError, loginUser, signupUser } from "@/lib/authApi";
 import { useAuth } from "@/contexts/AuthContext";
 
 const signupSchema = z.object({
   name: z.string().min(2, "Name must be at least 2 characters").max(50, "Name must be less than 50 characters"),
   email: z.string().email("Please enter a valid email address"),
-  password: z.string()
-    .min(8, "Password must be at least 8 characters")
-    .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
-    .regex(/[0-9]/, "Password must contain at least one number"),
+  password: z.string().min(8, "Password must be at least 8 characters"),
   terms: z.boolean().refine((val) => val === true, "You must accept the terms"),
 });
 
 const passwordRequirements = [
   { label: "At least 8 characters", test: (p: string) => p.length >= 8 },
-  { label: "One uppercase letter", test: (p: string) => /[A-Z]/.test(p) },
-  { label: "One number", test: (p: string) => /[0-9]/.test(p) },
 ];
 
 const Signup = () => {
@@ -64,17 +59,42 @@ const Signup = () => {
       const response = await signupUser({ name, email, password });
       setSession(response);
 
+      const isRepeatSignup = response.message.toLowerCase().includes("already existed");
+
       toast({
-        title: "Welcome to X-Ops!",
-        description: "Your account has been created successfully.",
+        title: isRepeatSignup ? "Welcome back!" : "Welcome to X-Ops!",
+        description: isRepeatSignup
+          ? "Account updated and signed in successfully."
+          : "Your account has been created successfully.",
       });
 
       navigate("/");
     } catch (error) {
+      if (isAuthApiError(error)) {
+        try {
+          const response = await loginUser({ email, password });
+          setSession(response);
+
+          toast({
+            title: "Welcome back!",
+            description: "This account already existed, so you were signed in.",
+          });
+
+          navigate("/");
+          return;
+        } catch {
+          // Fall through to a clear message when fallback sign-in fails.
+        }
+      }
+
       toast({
         title: "Account creation failed",
         description: isAuthApiError(error)
-          ? error.message
+          ? error.status === 409
+            ? "This email is already registered. Use the same password to sign in, or go to Log in."
+            : error.status === 0
+              ? "Could not reach the server. Refresh and try again."
+            : error.message
           : "Something went wrong. Please try again.",
         variant: "destructive",
       });
