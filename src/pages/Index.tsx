@@ -1,20 +1,19 @@
-            {/* Stats */}
-            <div className="grid grid-cols-3 gap-8 mt-16 pt-16 border-t border-border/50 animate-fade-in-up stagger-3">
-              {[
-                { value: "500+", label: "Members" },
-                { value: "50+", label: "Events Hosted" },
-                { value: "20+", label: "Partners" },
-              ].map((stat) => (
-                <div key={stat.label} className="text-center">
-                  <div className="text-3xl md:text-4xl font-bold text-gradient">{stat.value}</div>
-                  <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-                </div>
-              ))}
-            </div>
 import { Link } from "react-router-dom";
-import { ArrowRight, Code2, Users, Calendar, Sparkles, Cpu, Linkedin, Instagram, Mail } from "lucide-react";
+import {
+  ArrowRight,
+  Code2,
+  Users,
+  Calendar,
+  Sparkles,
+  Cpu,
+  Linkedin,
+  Instagram,
+  Mail,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Layout from "@/components/layout/Layout";
+import Announcement from "@/components/Announcement";
+import { useCmsContent } from "@/hooks/useCmsContent";
 import heroBg from "@/assets/hero-bg.jpg";
 
 const features = [
@@ -32,24 +31,6 @@ const features = [
     icon: Calendar,
     title: "Hackathons & Events",
     description: "Participate in exciting hackathons and compete for amazing prizes.",
-  },
-];
-
-const upcomingEvents = [
-  {
-    title: "AI/ML Workshop",
-    date: "Feb 15, 2026",
-    type: "Workshop",
-  },
-  {
-    title: "Spring Hackathon",
-    date: "Mar 1-2, 2026",
-    type: "Hackathon",
-  },
-  {
-    title: "Cloud Computing 101",
-    date: "Mar 20, 2026",
-    type: "Bootcamp",
   },
 ];
 
@@ -71,13 +52,31 @@ const socialLinks = [
   },
 ];
 
+const parseJsonArray = <T,>(value: string, fallback: T[]): T[] => {
+  try {
+    const parsed = JSON.parse(value);
+    return Array.isArray(parsed) ? (parsed as T[]) : fallback;
+  } catch {
+    return fallback;
+  }
+};
+
 const Index = () => {
+  const content = useCmsContent();
+  const dynamicSocialLinks = parseJsonArray(content.social_links_json, socialLinks);
+
+  const stats = [
+    { value: content.home_stat_members, label: "Members" },
+    { value: content.home_stat_events, label: "Events Hosted" },
+    { value: content.home_stat_partners, label: "Partners" },
+  ];
+
   return (
     <Layout>
       {/* Hero Section */}
       <section className="relative min-h-[90vh] flex items-center justify-center overflow-hidden">
         {/* Background Image with Overlay */}
-        <div 
+        <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${heroBg})` }}
         >
@@ -91,38 +90,35 @@ const Index = () => {
 
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-4xl mx-auto text-center">
-            {/* Badge */}
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/30 text-primary text-sm font-medium mb-8 animate-fade-in">
               <Sparkles className="h-4 w-4" />
-              <span>Welcome to the Future of Tech</span>
+              <span>{content.home_badge_text}</span>
             </div>
 
-            {/* Main Heading */}
             <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 animate-fade-in-up">
-              <span className="text-foreground" style={{ textShadow: '0 4px 24px #3b82f6, 0 1px 2px #60a5fa' }}>The X-Ops Club</span>
+              <span className="text-foreground" style={{ textShadow: "0 4px 24px #3b82f6, 0 1px 2px #60a5fa" }}>
+                {content.home_title}
+              </span>
             </h1>
 
-            {/* Subheading */}
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 animate-fade-in-up stagger-1">
-              Empowering the next generation of tech innovators through workshops, hackathons, and a vibrant community of passionate developers.
+              {content.home_subtitle}
             </p>
 
-            {/* CTA Buttons */}
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4 animate-fade-in-up stagger-2">
               <Button variant="hero" size="xl" asChild>
-                <Link to="/signup">
-                  Join X-Ops Today
+                <Link to={content.home_primary_cta_link || "/signup"}>
+                  {content.home_primary_cta_text}
                   <ArrowRight className="h-5 w-5" />
                 </Link>
               </Button>
               <Button variant="hero-outline" size="xl" asChild>
-                <Link to="/events">Explore Events</Link>
+                <Link to={content.home_secondary_cta_link || "/events"}>{content.home_secondary_cta_text}</Link>
               </Button>
             </div>
 
-            {/* Social media logos */}
             <div className="mt-8 flex items-center justify-center gap-3 animate-fade-in-up stagger-3">
-              {socialLinks.map((social) => (
+              {dynamicSocialLinks.map((social) => (
                 <a
                   key={social.label}
                   href={social.href}
@@ -136,13 +132,8 @@ const Index = () => {
               ))}
             </div>
 
-            {/* Stats */}
             <div className="grid grid-cols-3 gap-8 mt-12 pt-12 border-t border-border/50 animate-fade-in-up">
-              {[
-                { value: "30+", label: "Members" },
-                { value: "1+", label: "Events Hosted" },
-                { value: "3+", label: "Partners" },
-              ].map((stat) => (
+              {stats.map((stat) => (
                 <div key={stat.label} className="text-center">
                   <div className="text-3xl md:text-4xl font-bold text-gradient">{stat.value}</div>
                   <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
@@ -152,6 +143,24 @@ const Index = () => {
           </div>
         </div>
       </section>
+
+      {content.announcement_enabled && (
+        <section className="py-10">
+          <div className="container mx-auto px-4">
+            <div className="max-w-4xl mx-auto">
+              <Announcement
+                title={content.announcement_title}
+                body={content.announcement_body}
+                speaker={content.announcement_speaker}
+                joinLink={content.announcement_join_link}
+                date={content.announcement_date}
+                time={content.announcement_time}
+                mode={content.announcement_mode}
+              />
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Features Section */}
       <section className="py-24 relative">
@@ -183,9 +192,6 @@ const Index = () => {
         </div>
       </section>
 
-      {/* Upcoming Events Preview removed as requested */}
-
-      {/* CTA Section */}
       <section className="py-24">
         <div className="container mx-auto px-4">
           <div className="gradient-border p-12 md:p-16 text-center">
@@ -193,11 +199,11 @@ const Index = () => {
               Ready to Start Your <span className="text-gradient">Tech Journey?</span>
             </h2>
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-              Join our community of 30+ members and get access to exclusive events, 
+              Join our community of {content.home_stat_members} members and get access to exclusive events,
               workshops, and networking opportunities.
             </p>
             <Button variant="gradient" size="xl" asChild>
-              <Link to="/signup">
+              <Link to={content.home_primary_cta_link || "/signup"}>
                 Get Started Free
                 <ArrowRight className="h-5 w-5" />
               </Link>

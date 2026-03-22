@@ -1,5 +1,6 @@
 import { Target, Lightbulb, Users, Heart, Github, Linkedin, Twitter } from "lucide-react";
 import Layout from "@/components/layout/Layout";
+import { useCmsContent } from "@/hooks/useCmsContent";
 
 const values = [
   {
@@ -119,6 +120,8 @@ const milestones = [
   ];
 
 const About = () => {
+  const content = useCmsContent();
+
   return (
     <Layout>
       {/* Hero Section */}
@@ -127,10 +130,10 @@ const About = () => {
         <div className="container mx-auto px-4 relative z-10">
           <div className="max-w-3xl mx-auto text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-6">
-              About <span className="text-gradient">X-Ops</span>
+              {content.about_hero_title}
             </h1>
             <p className="text-lg text-muted-foreground">
-              X-Ops Club is a student-led community at JU-FET dedicated to advancing DevOps, AI, and automation through hands-on learning, collaboration, and innovation.
+              {content.about_hero_description}
             </p>
           </div>
         </div>
@@ -171,21 +174,10 @@ const About = () => {
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             <div>
               <h2 className="text-3xl md:text-4xl font-bold mb-6">
-                Our <span className="text-gradient">Mission</span>
+                {content.about_mission_heading}
               </h2>
               <p className="text-muted-foreground mb-4">
-                X-Ops exists to empower the next generation of tech innovators. We believe 
-                that everyone should have access to quality tech education and a supportive 
-                community to grow with.
-              </p>
-              <p className="text-muted-foreground mb-4">
-                Through hands-on workshops, hackathons, and networking events, we provide 
-                our members with the skills, connections, and opportunities they need to 
-                succeed in the ever-evolving tech industry.
-              </p>
-              <p className="text-muted-foreground">
-                Whether you're a complete beginner or a seasoned professional, there's a 
-                place for you at X-Ops. Join us and be part of something bigger.
+                {content.about_mission_body}
               </p>
             </div>
             <div className="grid grid-cols-2 gap-4">
