@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
-type EventType = "all" | "workshop" | "hackathon" | "bootcamp" | "meetup";
+type EventType = "all" | "workshop" | "hackathon" | "bootcamp" | "meetup" | "webinar";
 
 interface Event {
   id: number;
@@ -25,6 +25,7 @@ interface Event {
   hideAttendees?: boolean;
   speaker?: string;
   moreInfo?: string;
+  participationText?: string;
 }
 
 const events: Event[] = [
@@ -62,21 +63,23 @@ const events: Event[] = [
     maxAttendees: 120,
     image: "🎯",
     featured: true,
-    joinLink: "https://docs.google.com/forms/d/e/1FAIpQLScSSH4TaQ_ojWLoLimaA2CEIoYF9Eu-wonyWt77BEhB3YSkaw/viewform",
+    joinLink: "https://chaos-or-release-v2-production.up.railway.app",
+    registrationClosed: true,
+    participationText: "20+ teams participation",
   },
   {
-    id: 3,
-    title: "Cloud Computing Bootcamp",
-    description: "3-day intensive bootcamp covering AWS, Azure, and Google Cloud fundamentals.",
-    date: "March 20-22, 2026",
-    time: "10:00 AM - 4:00 PM",
-    location: "Virtual Event",
-    type: "bootcamp",
-    attendees: 80,
-    maxAttendees: 100,
-    image: "☁️",
-    hideDate: true,
-    hideAttendees: true,
+    id: 4,
+    title: "Guest Session with Ms. Praneetha K",
+    description:
+      "Join us for a special session with Ms. Praneetha K, Lead RPA Developer at Johnson & Johnson. Topic: TBA.",
+    date: "April 7th, 2026 (Wednesday)",
+    time: "9:00 AM",
+    location: "LH 201",
+    type: "meetup",
+    attendees: 0,
+    maxAttendees: 60,
+    image: "🎤",
+    speaker: "Ms. Praneetha K, Lead RPA Developer, Johnson & Johnson, New Brunswick, New Jersey, USA",
   },
 ];
 
@@ -86,6 +89,7 @@ const eventTypes: { value: EventType; label: string }[] = [
   { value: "hackathon", label: "Hackathons" },
   { value: "bootcamp", label: "Bootcamps" },
   { value: "meetup", label: "Meetups" },
+  { value: "webinar", label: "Webinars" },
 ];
 
 
@@ -194,7 +198,7 @@ const Events = () => {
                       )}
                       {event.joinLink && (
                         <div className="mb-2 text-sm">
-                          <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Join Link</a>
+                          <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Website Link</a>
                         </div>
                       )}
                       <div className="grid grid-cols-2 gap-3 text-sm text-muted-foreground mb-4">
@@ -212,7 +216,7 @@ const Events = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4 text-primary" />
-                          {event.attendees}/{event.maxAttendees} spots
+                          {event.participationText ?? `${event.attendees}/${event.maxAttendees} spots`}
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -293,7 +297,7 @@ const Events = () => {
                     )}
                     {event.joinLink && (
                       <div className="mb-2 text-sm">
-                        <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Join Link</a>
+                        <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Website Link</a>
                       </div>
                     )}
                     <div className="space-y-2 text-sm text-muted-foreground mb-4">
