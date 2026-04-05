@@ -20,13 +20,12 @@ interface Event {
   image: string;
   featured?: boolean;
   joinLink?: string;
-  linkLabel?: string;
-  spotsLabel?: string;
   registrationClosed?: boolean;
   hideDate?: boolean;
   hideAttendees?: boolean;
   speaker?: string;
   moreInfo?: string;
+  participationText?: string;
 }
 
 const events: Event[] = [
@@ -64,25 +63,23 @@ const events: Event[] = [
     maxAttendees: 120,
     image: "🎯",
     featured: true,
-    joinLink: "https://chaos-or-release-v2-production.up.railway.app/",
-    linkLabel: "chaos-or-release",
-    spotsLabel: "20+team spots",
+    joinLink: "https://chaos-or-release-v2-production.up.railway.app",
     registrationClosed: true,
+    participationText: "20+ teams participation",
   },
   {
     id: 4,
-    title: "Industry Webinar: RPA Career Insights",
+    title: "Guest Session with Ms. Praneetha K",
     description:
-      "A webinar session with Ms. Praneetha K on RPA career pathways and real-world industry experience.",
-    moreInfo:
-      "Speaker: Ms. Praneetha K\nLead RPA Developer\nJohnson & Johnson, New Brunswick, New Jersey, USA.",
-    date: "April 7, 2026 (Tuesday)",
+      "Join us for a special session with Ms. Praneetha K, Lead RPA Developer at Johnson & Johnson. Topic: TBA.",
+    date: "April 7th, 2026 (Wednesday)",
     time: "9:00 AM",
-    location: "LH201",
-    type: "webinar",
+    location: "LH 201",
+    type: "meetup",
     attendees: 0,
-    maxAttendees: 100,
-    image: "🎙️",
+    maxAttendees: 60,
+    image: "🎤",
+    speaker: "Ms. Praneetha K, Lead RPA Developer, Johnson & Johnson, New Brunswick, New Jersey, USA",
   },
 ];
 
@@ -201,7 +198,7 @@ const Events = () => {
                       )}
                       {event.joinLink && (
                         <div className="mb-2 text-sm">
-                          <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">{event.linkLabel ?? "Join Link"}</a>
+                          <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Website Link</a>
                         </div>
                       )}
                       <div className="grid grid-cols-2 gap-3 text-sm text-muted-foreground mb-4">
@@ -219,7 +216,7 @@ const Events = () => {
                         </div>
                         <div className="flex items-center gap-2">
                           <Users className="h-4 w-4 text-primary" />
-                          {event.spotsLabel ?? `${event.attendees}/${event.maxAttendees} spots`}
+                          {event.participationText ?? `${event.attendees}/${event.maxAttendees} spots`}
                         </div>
                       </div>
                       <div className="flex gap-2">
@@ -300,7 +297,7 @@ const Events = () => {
                     )}
                     {event.joinLink && (
                       <div className="mb-2 text-sm">
-                        <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">{event.linkLabel ?? "Join Link"}</a>
+                        <a href={event.joinLink} target="_blank" rel="noopener noreferrer" className="underline text-blue-600">Website Link</a>
                       </div>
                     )}
                     <div className="space-y-2 text-sm text-muted-foreground mb-4">

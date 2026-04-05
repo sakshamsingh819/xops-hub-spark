@@ -10,6 +10,7 @@ import { useCmsContent } from "@/hooks/useCmsContent";
 const defaultNavLinks = [
   { name: "Home", path: "/" },
   { name: "Events", path: "/events" },
+  { name: "Gallery", path: "/gallery" },
   { name: "About", path: "/about" },
 ];
 

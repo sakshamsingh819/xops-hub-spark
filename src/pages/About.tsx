@@ -31,56 +31,56 @@ const teamMembers = [
     name: "Shreyas S",
     role: "Club Lead",
     bio: "Leading the shift to autonomous DevOps.",
-    avatar: "👨",
+    photo: "/Shreyas S.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/shreyas-s-357056327?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Lakshitha A",
     role: "Club Co-Lead",
     bio: "Accelerating team growth and AI integration.",
-    avatar: "👩",
+    photo: "/Lakshitha A.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/lakshitha-a-b16090330?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Saksham Singh",
     role: "Technical Lead",
     bio: "Debugging the future with AI-enhanced workflows.",
-    avatar: "🧑‍💻",
+    photo: "/Saksham Singh.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/saksham-singh-94658b322/" },
   },
   {
     name: "Thulasi Sri Nidhi",
     role: "Technical Co-Lead",
     bio: "Building the pipelines that power the club.",
-    avatar: "👩‍💻",
+    photo: "/Thulasi Sri Nidhi.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/thulasi-sri-nidhi-ba17a3382?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Thavanidhi V P",
     role: "Event & Outreach Lead",
     bio: "Bridging the gap between AI tech and the student community.",
-    avatar: "👩",
+    photo: "/Thavanidhi V P.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/thavanidhi-v-p-1a797136a?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=ios_app" },
   },
   {
     name: "Sujay V",
     role: "Event & Outreach Co-Lead",
     bio: "Expanding the ecosystem for the next gen of DevOps.",
-    avatar: "🧑",
+    photo: "/Sujay V.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/sujayv26?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Aniruddh V N",
     role: "Treasurer",
     bio: "Managing resources for a high-performance tech future.",
-    avatar: "🧑",
+    photo: "/Aniruddh V N.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/aniruddh-v-n-5b7124340?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
   {
     name: "Divyashree M",
     role: "Co-Treasurer",
     bio: "Financial operations for sustainable tech growth.",
-    avatar: "👩",
+    photo: "/Divyashree M.jpg",
     socials: { linkedin: "https://www.linkedin.com/in/divyashree-m-11a334326?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" },
   },
 ];
@@ -269,7 +269,12 @@ const About = () => {
                 className="gradient-border p-6 text-center card-hover animate-fade-in-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="text-6xl mb-4">{member.avatar}</div>
+                <img
+                  src={member.photo}
+                  alt={`${member.name} profile`}
+                  className="w-24 h-24 rounded-full object-cover mx-auto mb-4 border border-border"
+                  loading="lazy"
+                />
                 <h3 className="text-lg font-semibold">{member.name}</h3>
                 <p className="text-primary text-sm font-medium mb-2">{member.role}</p>
                 <p className="text-muted-foreground text-sm mb-4">{member.bio}</p>
